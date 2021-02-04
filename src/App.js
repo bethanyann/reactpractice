@@ -13,6 +13,8 @@ class App extends Component {
         {id:4, value:0},
     ]
   }
+
+  
   //passing in a counterId so we know which counter object to delete
   handleDelete = (counterId) => {
     // console.log('event handler called ', counterId); //log things in the console to make sure its working as expected
@@ -30,6 +32,14 @@ class App extends Component {
       this.setState({counters:newCounters});
   }
 
+  handleDecrement = counter => {
+      const newCounters = [...this.state.counters];
+      const index = newCounters.indexOf(counter);
+      newCounters[index] = {...counter};
+      newCounters[index].value--;
+      this.setState({counters:newCounters});
+  }
+
   //pass in new array of counters here to reset back to the beginning
   handleReset = () => {
       const resetCounters = this.state.counters.map(c => {
@@ -39,14 +49,14 @@ class App extends Component {
       this.setState({counters: resetCounters });
   }
 render() {
-
    return (
     <div>
-      <NavBar />
+      <NavBar totalCounters={this.state.counters.filter(c => c.value > 0).length }/>
         <main className="container">
           <Counters 
             counters = {this.state.counters}
             onReset={this.handleReset} 
+            onDecrement={this.handleDecrement}
             onIncrement={this.handleIncrement}
             onDelete={this.handleDelete} />
         </main>
